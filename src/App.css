@@ -44,7 +44,7 @@
 
 #prevbtn{
     border: none;
-    background-color: white;
+    background-color: transparent;
     position: fixed;
     left: 5%;
     top: 50%;
@@ -52,7 +52,7 @@
 
 #nextbtn{
     border: none;
-    background-color: white;
+    background-color: transparent;
     position: fixed;
     right: 5%;
     top:50%;

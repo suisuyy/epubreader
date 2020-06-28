@@ -1,11 +1,15 @@
 import React from 'react';
-import { Route } from 'react-router-dom'
+import { Route } from 'react-router-dom';
 
 import './App.css';
 import { savefile, getfile, getAllFiles, rmFiles } from './utils/fileapi'
+import { getAllBookNamesOnline, getAllFileNamesOnline, getRemoteFile, uploadFile } from './utils/api';
 
-import Shelf from './Shelf.js'
-import EpubView from './EpubView'
+import Shelf from './Shelf.js';
+import EpubView from './EpubView';
+import Dict from './componets/Dict';
+import NavBar from './componets/NavBar';
+
 
 export default class App extends React.Component {
     constructor(props) {
@@ -13,23 +17,30 @@ export default class App extends React.Component {
         this.state = {
             currentBook: null,
             currentFile: null,
-            bookfiles: []
-        }
-        console.log(fetch('http://d.noty50.top'))
+            bookfiles: [],
+            dictfiles: [],
+            onlineBookNames: []
+        };
 
     }
 
     render() {
         return (
             <div id='appdiv'>
-                <button className="noborder" onClick={this.toggleFullScreen}>{"[ ]"}</button>
+                <NavBar />
                 <Route exact path='/' render={({ history }) => (
                     <div className="home">
                         <input className='noborder' type='file' onChange={(e) => this.handleFileInput(e)} />
-                        <Shelf bookfiles={this.state.bookfiles} name='local' onBookClick={(file) => {
-                            this.onBookClick(file);
+                        <Shelf booknames={this.state.bookfiles.map(i => i.name)} name='local' openBook={(filename) => {
+                            this.openBook(filename);
                             history.push('/reader');
-                        }} />
+                        }}
+                            uploadBook={(name)=>this.uploadFile(name)}
+                        />
+                        <Shelf name='online' 
+                         booknames={this.state.onlineBookNames}
+                         downloadBook={(name)=>this.downloadFile(name)}
+                         />
 
                     </div>
                 )} />
@@ -37,37 +48,40 @@ export default class App extends React.Component {
                 <Route path='/reader' render={() => (
                     <EpubView file={this.state.currentFile} />
                 )} />
-
+                <Route path='/dict' render={() => {
+                    if (this.state.dictfiles.length <= 0) {
+                        return (<p>loading dict ...</p>)
+                    }
+                    console.log('dict load:', Array.isArray(this.state.dictfiles))
+                    return <Dict dictfiles={this.state.dictfiles} />
+                }} />
             </div>
         );
     }
 
     componentDidMount() {
+        getAllBookNamesOnline().then((data) => {
+            this.setState({
+                onlineBookNames: data,
+            })
+        });
+        
         getAllFiles((event) => {
-            this.setState({ bookfiles: event.target.result });
+            let files = event.target.result;
+            console.log(files)
+            let epubfiles = files.filter(f => f.name.endsWith('epub'));
+            let dictfiles = files.filter(f => f.name.endsWith('json'));
+            if (Array.isArray(dictfiles) !== true) {
+                console.log('not aray');
+                dictfiles = [dictfiles]
+            }
+            this.setState({
+                bookfiles: epubfiles,
+                dictfiles: dictfiles
+            });
         });
     }
 
-    toggleFullScreen() {
-        if (!document.fullscreenElement &&    // alternative standard method
-            !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.mozRequestFullScreen) {
-                document.documentElement.mozRequestFullScreen();
-            } else if (document.documentElement.webkitRequestFullscreen) {
-                document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-        } else {
-            if (document.cancelFullScreen) {
-                document.cancelFullScreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitCancelFullScreen) {
-                document.webkitCancelFullScreen();
-            }
-        }
-    }
 
     handleFileInput(e) {
         let file = e.target.files[0];
@@ -78,9 +92,32 @@ export default class App extends React.Component {
         savefile(file);
     }
 
-    onBookClick(file) {
+    downloadFile(name) {
+        getRemoteFile(name).then(resBlob => {
+            let file=new File([resBlob],name);
+            if (name.endsWith('.epub')) {
+                this.setState({
+                    bookfiles:this.state.bookfiles.concat(file)
+                })
+            }
+            savefile(file);
+
+        })
+    }
+
+    uploadFile(name){
+        uploadFile(name).then(()=>{
+            if (name.endsWith('.epub')) {
+                this.setState({
+                    onlineBookNames:this.state.onlineBookNames.concat(name)
+                })
+            }
+        }
+        )
+    }
+    openBook(filename) {
         this.setState({
-            currentFile: file,
+            currentFile: this.state.bookfiles.filter(i => i.name === filename)[0],
         });
     }
 }

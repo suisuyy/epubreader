@@ -50,9 +50,9 @@ export default class EpubView extends React.Component{
         this.rendition = book.renderTo("area", {width: "100%", height: "100%",flow: "scrolled-doc" ,});
         this.rendition.display().then(()=>{
             console.log('updated')
-            this.rendition.themes.default({
+            this.rendition.themes.override({
                 "body": { "padding": "0 !important"},
-                "div":{"padding":"0 0 0 1% !important"}
+                "div":{"padding":"0 0 0 1% !important","font-familly":"Courier New !important"}
             })
         });
         book.loaded.navigation.then(nav=>{

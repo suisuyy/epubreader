@@ -37,8 +37,8 @@ export function getfile(name, dbname = 'files') {
         // Handle errors.
         console.log('error when open db', dbname)
     };
-
-    request.onsuccess = function (event) {
+    return new Promise(resolve=>{
+        request.onsuccess = function (event) {
         var db = request.result;
 
         // add a new data to developers object store
@@ -48,17 +48,26 @@ export function getfile(name, dbname = 'files') {
             .get(name)
             .onsuccess = function (event) {
                 console.log('got the file:', event.target.result);
-                return event.target.result;
+                resolve(event.target.result);
             };
 
-    }
+    };
+    });
+    
 }
 
 export function getAllFiles(onsuccess,dbname = 'files') {
     let request = window.indexedDB.open(dbname, 3);
     request.onerror = function (event) {
         // Handle errors.
-        console.log('error when open db', dbname)
+        console.log('error when open db', dbname);
+    };
+
+    request.onupgradeneeded = function (event) {
+        var db = event.target.result;
+        db.createObjectStore('epubs');
+
+        console.log('fileapi:upgraded')
     };
 
     request.onsuccess = function (event) {

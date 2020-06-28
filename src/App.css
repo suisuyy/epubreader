@@ -57,3 +57,22 @@
     right: 5%;
     top:50%;
 }
+
+.larger-font{
+  font-size: 0.9em;
+}
+
+.larger-margin{
+  margin-bottom: 30px;
+}
+
+.bookli{
+  padding-bottom: 10px;
+  font-family: 'Courier New', Courier, monospace;
+  width: 400px;
+}
+.bookbtn{
+  font-size: medium;
+  
+ 
+}

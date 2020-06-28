@@ -1,9 +1,11 @@
 import { getfile } from './fileapi';
 
-export const api_url = "http://localhost:8080/";
+export const api_url = "http://hk.noty50.top:8001/";
+
+let header={'Access-Control-Allow-Origin':'*.noty50.top'};
 
 export function getAllFileNamesOnline() {
-    return fetch(api_url + 'getfnames').then((respose) => {
+    return fetch(api_url + 'getfnames',header).then((respose) => {
         return respose.json();
     });
 }
@@ -25,7 +27,7 @@ export function getFileNamesOnline(xname) {
 }
 
 export function getRemoteFile(fname) {
-    return fetch(api_url + 'files/' + fname).then(response => response.blob());
+    return fetch(api_url + 'files/' + fname,header).then(response => response.blob());
 }
 
 
@@ -34,8 +36,9 @@ export function uploadFile(fname) {
     return getfile(fname).then(file => {
         formData.append('filetoupload', file);
         return fetch(api_url+'upload', {
+            ...header,
             method: 'POST',
-            body: formData
+            body: formData,
         })
             .then(response => response.json())
             .then(result => {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Filer from 'filer';
 
 import './App.css';
 import { savefile, getfile, getAllFiles, rmFiles } from './utils/fileapi'
@@ -93,10 +92,6 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-        Filer.fs.mkdir('/testdir', err => console.log('err in mkdir', err));
-        Filer.fs.readdir('/', (err, fnames) => {
-            console.log(fnames);
-        })
         getAllBookNamesOnline().then((data) => {
             this.setState({
                 onlineBookNames: data,

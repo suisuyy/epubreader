@@ -11,9 +11,10 @@ export default class EpubView extends React.Component{
         this.book=null;
         this.toc=[];
         this.state={
+            ifShowTocTool: true,
             ifShowToc:true,
             currentLocation: null,
-        }
+        };
     }
     render(){
 
@@ -21,15 +22,16 @@ export default class EpubView extends React.Component{
             return <p>error,go back and open book agian</p>
         }
         return (
-            <div className='epub-view'>
+            <div className='epub-view' id='epubviewer'>
                 <p>{this.props.file.name}</p>
                 <TOC toc={this.toc} rendition={this.rendition} ifShowToc={this.state.ifShowToc}
                     toogleTOC={()=>this.toogleTOC()}
                 />
 
-                <div id="area"></div>
-                <button id='prevbtn' onClick={()=>this.rendition.prev()}>{"<"}</button>
-                <button id='nextbtn' onClick={()=>this.rendition.next()}>{">"}</button>
+                <div id="contentview"></div>
+                <button id='prevbtn' onClick={()=>this.prev()}>{"<"}</button>
+                <button id='nextbtn' onClick={()=>this.next()}>{">"}</button>
+                <button className='noborder large-font blue-font' onClick={()=>this.next()}>{"next >"}</button>
                 <Tool />
             </div>
         )
@@ -46,10 +48,9 @@ export default class EpubView extends React.Component{
             book.open(fileData);
         }
         freader.readAsArrayBuffer(this.props.file);  
-        document.getElementById('area').innerHTML='';
-        this.rendition = book.renderTo("area", {width: "100%", height: "100%",flow: "scrolled-doc" ,});
+        document.getElementById('contentview').innerHTML='';
+        this.rendition = book.renderTo("contentview", {width: "100%", height: "2000",spread: "always",});
         this.rendition.display().then(()=>{
-            console.log('updated')
             this.rendition.themes.override({
                 "body": { "padding": "0 !important"},
                 "div":{"padding":"0 0 0 1% !important","font-familly":"Courier New !important"}
@@ -57,6 +58,9 @@ export default class EpubView extends React.Component{
         });
         book.loaded.navigation.then(nav=>{
             this.rendertoc(nav.toc);
+        })
+        this.rendition.on("rendered", (e,i) => {
+            i.document.onselectionchange=()=>this.props.setWordFromBook(i.document.getSelection().toString());
         })
     }
 
@@ -80,6 +84,15 @@ export default class EpubView extends React.Component{
             ifShowToc:!this.state.ifShowToc,
         })
     }
+
+    prev(){
+        this.rendition.prev();
+    }
+    next(){
+        this.rendition.next();
+        document.getElementById('contentview').scrollIntoView();
+    }
+    
 }
 
 class Tool extends React.Component{

@@ -10,14 +10,15 @@ export default class Shelf extends React.Component {
                 <ol>
                     {booknames.map(item => {
                         return (
-                            <li key={item} 
-                            className='bookli'
+                            <li key={item}
+                                className='bookli'
                             >
-                                <Bookli 
-                                name={item} type={this.props.name} 
-                                openBook={this.props.openBook} 
-                                downloadBook={this.props.downloadBook}
-                                uploadBook={this.props.uploadBook}
+                                <Bookli
+                                    name={item} type={this.props.name}
+                                    openBook={this.props.openBook}
+                                    downloadBook={this.props.downloadBook}
+                                    uploadBook={this.props.uploadBook}
+                                    rmFile={this.props.rmFile}
                                 />
                             </li>)
                     })}
@@ -27,15 +28,22 @@ export default class Shelf extends React.Component {
     };
 }
 
-function Bookli(props){
-    return(
-        <div className="bookli"> 
-            <i>{props.name}</i> 
+function Bookli(props) {
+    return (
+        <div className="bookli">
+            <i>{props.name}</i>
             <div >
-            <button className='noborder bookbtn' onClick={()=>props.openBook(props.name)}>read</button>
-            <button className='noborder bookbtn' onClick={props.type==='local'?()=>props.uploadBook(props.name):()=>props.downloadBook(props.name)}>
-                {props.type==='local'? 'upload': 'download'}
-            </button>
+                {props.type === 'local' &&
+                    <button className='noborder bookbtn' onClick={() => props.openBook(props.name)}>read</button>}
+                <button className='noborder bookbtn' onClick={props.type === 'local' ? () => props.uploadBook(props.name) : () => props.downloadBook(props.name)}>
+                    {props.type === 'local' ? 'upload' : 'download'}
+                </button>
+                {props.type === 'local' &&
+                    <button
+                        className='noborder bookbtn'
+                        onClick={() => props.rmFile(props.name)}>
+                        remove
+                    </button>}
 
             </div>
         </div>

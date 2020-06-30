@@ -58,6 +58,10 @@
     top:50%;
 }
 
+.large-font{
+  font-size: 2em;
+}
+
 .larger-font{
   font-size: 0.9em;
 }
@@ -69,10 +73,38 @@
 .bookli{
   padding-bottom: 10px;
   font-family: 'Courier New', Courier, monospace;
-  width: 400px;
+  width: 90%;
 }
 .bookbtn{
   font-size: medium;
   
  
+}
+
+.navbar{
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: darkblue;
+  z-index: 10;
+}
+
+.blue-font{
+  color: blue;
+}
+
+#epubviewer{
+  z-index: -1;
+}
+
+.dict{
+  position: fixed;
+  top:50px;
+  overflow: scroll;
+  width: 80%;
+  height: 300px;
+  border-color: lightblue;
+  border-width: 3px;
+  border-style: solid;
+  background-color: lightcyan;
 }

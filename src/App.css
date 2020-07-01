@@ -39,7 +39,7 @@
 
 .noborder{
     border:none;
-    background-color: white;
+    background-color: inherit;
 }
 
 #prevbtn{
@@ -59,7 +59,7 @@
 }
 
 .large-font{
-  font-size: 2em;
+  font-size: 3em;
 }
 
 .larger-font{
@@ -85,8 +85,23 @@
   position: fixed;
   top: 0;
   right: 0;
-  background-color: darkblue;
   z-index: 10;
+  min-width: 50px;
+  min-height: 50px;
+  background-color: lightcyan;
+}
+.navbarmin{
+  margin: 10px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background-color: lightblue;
+  z-index: 10;
+  min-width: 50px;
+  min-height: 50px;
+  border-radius: 50%;
+  opacity: 0.6;
+  text-align: center;
 }
 
 .blue-font{
@@ -107,4 +122,28 @@
   border-width: 3px;
   border-style: solid;
   background-color: lightcyan;
+}
+
+.tocitem{
+  color: blue;
+
+}
+.navbar >ol>li{
+  margin-bottom: 30px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+/* Separate rule for compatibility, :focus-within is required on modern Firefox and Chrome */
+input.visually-hidden:focus + label {
+  outline: thin dotted;
+}
+input.visually-hidden:focus-within + label {
+  outline: thin dotted;
 }

@@ -69,6 +69,8 @@ export default class EpubView extends React.Component{
         toclist.map(item=>{
             let li=document.createElement('li');
             li.innerHTML=item.label;
+            li.style.color='blue';
+            li.style.marginBottom='20px';
             li.addEventListener('click',()=>{
                 this.rendition.display(item.href);
                 this.setState({ifShowToc:false});

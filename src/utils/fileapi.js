@@ -98,6 +98,6 @@ export function rmFiles(names = [], dbname = 'files') {
         names.map((name) => {
             objectStore.delete(name);
             return 0;
-        })
+        });
     }
 }

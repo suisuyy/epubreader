@@ -1,8 +1,8 @@
 import { getfile } from './fileapi';
 
-export const api_url = "http://hk.noty50.top:8001/";
+export const api_url = "https://api.noty50.top/";
 
-let header={'Access-Control-Allow-Origin':'*.noty50.top'};
+let header={'Access-Control-Allow-Origin':'noty50.top'};
 
 export function getAllFileNamesOnline() {
     return fetch(api_url + 'getfnames',header).then((respose) => {

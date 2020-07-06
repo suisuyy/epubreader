@@ -43,7 +43,7 @@ export default class App extends React.Component {
                 <Route exact path='/' render={({ history }) => (
                     <div className="home">
                             <input id="fileElem" className='noborder visually-hidden' type='file' onChange={(e) => this.handleFileInput(e)} />
-                            <label for="fileElem">click me to Select book from your computer</label>
+                            <label htmlFor="fileElem">click me to Select book from your computer</label>
                             <Shelf booknames={this.state.bookfiles.map(i => i.name)}
                                 name='local'
                                 openBook={(filename) => {

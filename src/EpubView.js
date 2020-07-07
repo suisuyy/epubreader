@@ -61,6 +61,9 @@ export default class EpubView extends React.Component{
         })
         this.rendition.on("rendered", (e,i) => {
             i.document.onselectionchange=()=>this.props.setWordFromBook(i.document.getSelection().toString());
+            let mathjaxScript=document.createElement('script');
+            mathjaxScript.src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML';
+            i.document.body.appendChild(mathjaxScript);
         })
     }
 

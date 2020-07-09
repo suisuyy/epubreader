@@ -28,10 +28,11 @@ export default class EpubView extends React.Component{
                     toogleTOC={()=>this.toogleTOC()}
                 />
 
+                <button className='prevbtn' onClick={()=>this.prev()}>prev</button>
+                <button className='nextbtn' onClick={()=>this.next()}>next</button>
                 <div id="contentview"></div>
-                <button id='prevbtn' onClick={()=>this.prev()}>{"<"}</button>
-                <button id='nextbtn' onClick={()=>this.next()}>{">"}</button>
-                <button className='noborder large-font blue-font' onClick={()=>this.next()}>{"next >"}</button>
+                <button className='prevbtn' onClick={()=>this.prev()}>prev</button>
+                <button className='nextbtn' onClick={()=>this.next()}>next</button>
                 <Tool />
             </div>
         )
@@ -51,16 +52,21 @@ export default class EpubView extends React.Component{
         document.getElementById('contentview').innerHTML='';
         this.rendition = book.renderTo("contentview", {width: "100%", height: "2000",spread: "always",});
         this.rendition.display().then(()=>{
-            this.rendition.themes.override({
+            this.rendition.themes=({
                 "body": { "padding": "0 !important"},
-                "div":{"padding":"0 0 0 1% !important","font-familly":"Courier New !important"}
+                "div":{"padding":"0 0 0 1% !important","font-familly":"Courier New !important","font-size": "30px !important",}
             })
         });
         book.loaded.navigation.then(nav=>{
             this.rendertoc(nav.toc);
         })
         this.rendition.on("rendered", (e,i) => {
-            i.document.onselectionchange=()=>this.props.setWordFromBook(i.document.getSelection().toString());
+            i.document.onselectionchange=()=>{
+                this.props.setWordFromBook(i.document.getSelection().toString());
+                
+                i.document.getSelection().toString().length>1 && this.props.showDict();
+            
+            };
             let mathjaxScript=document.createElement('script');
             mathjaxScript.src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML';
             i.document.body.appendChild(mathjaxScript);

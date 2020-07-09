@@ -33,7 +33,7 @@ function Bookli(props) {
         <div className="bookli">
             <i>{props.name}</i>
             <div >
-                {props.type === 'local' &&
+                {props.type === 'local' &&props.name.endsWith('epub') &&
                     <button className='noborder bookbtn' onClick={() => props.openBook(props.name)}>read</button>}
                 <button className='noborder bookbtn' onClick={props.type === 'local' ? () => props.uploadBook(props.name) : () => props.downloadBook(props.name)}>
                     {props.type === 'local' ? 'upload' : 'download'}

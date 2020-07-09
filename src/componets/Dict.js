@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { mobileAndTabletCheck } from "../utils/help";
 
 export default class Dict extends React.Component {
     constructor(props) {
@@ -14,20 +15,20 @@ export default class Dict extends React.Component {
     componentWillReceiveProps(nextProps) {
         //if your props is received after the component is mounted, then this function will update the state accordingly.
         if (this.props.wordFromBook !== nextProps.wordFromBook) {
-            this.setState({ word: nextProps.wordFromBook });
+            this.setState({ 
+                word: nextProps.wordFromBook 
+            });
         }
     }
     render() {
         return (
             <div className='dict' style={{...this.props.style,...this.state.style}}>
-                <div>
+                <div class='dict-button-group'>
                 <a href="#localdict"> <button className="dictbutton">Local</button> </a>
                 <a href="#yddict"> <button className="dictbutton">YouDao</button> </a>
                 <button onClick={()=>this.moveUp()} className="dictbutton">up</button>
                 <button onClick={()=>this.moveDown()} className="dictbutton">down</button>
                 <button onClick={()=>this.props.toggleDict() } className="dictbutton">close</button>
-
-
                 </div>
                 
                 {this.props.dictfiles.length !== 0 &&
@@ -44,25 +45,30 @@ export default class Dict extends React.Component {
                         </form>
                         <p>{this.props.wordFromBook}</p>
                         <div className='defview'>
-                            <ol>
-
-                                {this.state.word.length > 1 && this.state.dict[this.state.word] && this.state.dict[this.state.word].map((item) => {
-                                    return <li key={Math.random()}>
-                                        <p>{item}</p>
-                                    </li>
-                                })}
-                            </ol>
+                            
+                                {this.state.word.length > 1 && 
+                                    this.state.dict[this.state.word] && 
+                                <div dangerouslySetInnerHTML={{ __html: this.state.dict[this.state.word] }} />}              
                         </div>
                     </div>
 
                 }
                 
+                {mobileAndTabletCheck()===true &&
                 <iframe title="youdao" 
                 id="yddict"
-                src={`https://m.youdao.com/dict?q=${this.state.word}#collins` }
-                />
-
-
+                width="100%"
+                height="500px"
+                 src={`https://m.youdao.com/dict?q=${this.state.word}` }
+                />}
+                {mobileAndTabletCheck()===false &&
+                <iframe title="youdao" 
+                id="yddict"
+                width="100%"
+                height="500px"
+                sandbox=""
+                 src={`https://dict.youdao.com/w/${this.state.word}` }
+                />}
             </div>
 
         )
@@ -75,11 +81,13 @@ export default class Dict extends React.Component {
             this.setState({
                 dict: JSON.parse(result),
             })
+            
         }
-        if (this.props.dictfiles.length === 0) {
-            return
-        }
-        fr.readAsText(this.props.dictfiles[0]);
+        console.log(this.props.dictfiles)
+        setTimeout(() => {
+            this.props.dictfiles.length!==0 && fr.readAsText(this.props.dictfiles[0]);
+            
+        }, 2000);
         document.onselectionchange = () => {
             let word = document.getSelection().toString();
             if (word.length > 1) {

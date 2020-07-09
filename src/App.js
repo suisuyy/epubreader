@@ -38,12 +38,13 @@ export default class App extends React.Component {
     render() {
         return (
             <div id='appdiv'>
-                {this.state.ifShowNavBar === true && <NavBar toggleDict={() => this.toggleDict()} />}
+                {this.state.ifShowNavBar === true 
+                    && <NavBar 
+                    handleFileInput={(e)=>this.handleFileInput(e)}
+                    toggleDict={() => this.toggleDict()} />}
 
                 <Route exact path='/' render={({ history }) => (
                     <div className="home">
-                        <input id="fileElem" className='noborder visually-hidden' type='file' onChange={(e) => this.handleFileInput(e)} />
-                        <label htmlFor="fileElem">click me to Select book from your computer</label>
                         <Shelf booknames={this.state.bookfiles.map(i => i.name)}
                             name='local'
                             openBook={(filename) => {
@@ -66,7 +67,11 @@ export default class App extends React.Component {
                 )} />
 
                 <Route path='/reader' render={() => (
-                    <EpubView file={this.state.currentFile} setWordFromBook={(word) => this.setState({ wordFromBook: word })} />
+                    <EpubView 
+                    file={this.state.currentFile} 
+                    setWordFromBook={(word) => this.setState({ wordFromBook: word })}
+                    showDict={()=>this.showDict()}
+                    />
                 )} />
 
 
@@ -75,6 +80,7 @@ export default class App extends React.Component {
                     dictfiles={this.state.dictfiles}
                     style={{ display: this.state.ifShowDict ? 'inherit' : 'none' }}
                     toggleDict={()=>this.toggleDict()}
+                    
                 />
 
                 {/* <Route path='/dict' render={() => {
@@ -109,7 +115,7 @@ export default class App extends React.Component {
                 dictfiles = [dictfiles]
             }
             this.setState({
-                bookfiles: epubfiles,
+                bookfiles: [...epubfiles,...dictfiles],
                 dictfiles: dictfiles
             });
         });
@@ -187,6 +193,13 @@ export default class App extends React.Component {
         this.setState({
             word: document.getSelection().toString(),
             ifShowDict: !this.state.ifShowDict,
+        })
+    }
+    showDict(){
+        console.log('showdict' + document.getSelection().toString())
+        this.setState({
+            word: document.getSelection().toString(),
+            ifShowDict: true,
         })
     }
 }

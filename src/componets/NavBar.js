@@ -43,6 +43,13 @@ export default class NavBar extends React.Component {
                         <button className='noborder larger-font' onClick={toggleFullScreen} >fullscreen</button>
                     </li>
                     <li>
+                        <input id="fileElem" className='noborder visually-hidden' type='file' onChange={(e) => this.props.handleFileInput(e)} />
+                        <label htmlFor="fileElem"
+                        className='noborder larger-font'
+                        style={{marginLeft:"7px"}}
+                        >import local file</label>
+                    </li>
+                    <li>
                         <button 
                         onClick={()=>this.setState({max:false})}
                         className='noborder larger-font'>

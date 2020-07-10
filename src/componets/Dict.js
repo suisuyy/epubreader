@@ -16,7 +16,7 @@ export default class Dict extends React.Component {
         //if your props is received after the component is mounted, then this function will update the state accordingly.
         if (this.props.wordFromBook !== nextProps.wordFromBook) {
             this.setState({
-                word: nextProps.wordFromBook
+                word: nextProps.wordFromBook.toLowerCase()
             });
         }
     }
@@ -60,8 +60,8 @@ export default class Dict extends React.Component {
                         <div className='defview'>
 
                             {this.state.word.length > 1 &&
-                                this.state.dict[this.state.word] &&
-                                <div dangerouslySetInnerHTML={{ __html: this.state.dict[this.state.word] }} />}
+                                this.state.dict[this.state.word.toLowerCase()] &&
+                                <div dangerouslySetInnerHTML={{ __html: this.state.dict[this.state.word.toLowerCase()] }} />}
                         </div>
                     </div>
 
@@ -128,7 +128,7 @@ export default class Dict extends React.Component {
 
     handleInput(event) {
         this.setState({
-            word: event.target.value
+            word: event.target.value.toLowerCase()
         })
     }
     search(word) {

@@ -41,7 +41,9 @@ export default class App extends React.Component {
                 {this.state.ifShowNavBar === true 
                     && <NavBar 
                     handleFileInput={(e)=>this.handleFileInput(e)}
-                    toggleDict={() => this.toggleDict()} />}
+                    toggleDict={() => this.toggleDict()} 
+                    showDict={()=>this.showDict()}/>
+                    }
 
                 <Route exact path='/' render={({ history }) => (
                     <div className="home">

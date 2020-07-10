@@ -174,3 +174,19 @@ input.visually-hidden:focus-within + label {
 #collinsResult .collinsOrder {
     float: left;    
 }
+input{
+    height: 30px;
+    width: 90%;
+}
+
+#localdict{
+    font-size: 0.6em;
+    
+}
+
+.dict-textarea{
+    width: 89%;
+    height: 100px;
+    font-size: medium;
+     -webkit-user-select: none;
+}

@@ -15,12 +15,18 @@ export default class NavBar extends React.Component {
         if (this.state.max !== true) {
             return (<div
                 onClick={() => this.setState({ max: true })}
+                onDoubleClick={()=>this.props.showDict()}
                 className="navbarmin lage-font">
-                ...
             </div>)
         }
         return (
             <div className="navbar" id="navbar">
+                <div
+                onClick={() => this.setState({ max: true })}
+                onDoubleClick={()=>this.props.showDict()}
+                className="navbarmin lage-font">
+                
+            </div>
                 <ol>
                     <li>
                         <Link

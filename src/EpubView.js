@@ -22,7 +22,10 @@ export default class EpubView extends React.Component{
             return <p>error,go back and open book agian</p>
         }
         return (
-            <div className='epub-view' id='epubviewer'>
+            <div 
+            className='epub-view'
+             id='epubviewer'
+             >
                 <p>{this.props.file.name}</p>
                 <TOC toc={this.toc} rendition={this.rendition} ifShowToc={this.state.ifShowToc}
                     toogleTOC={()=>this.toogleTOC()}
@@ -65,8 +68,14 @@ export default class EpubView extends React.Component{
                 this.props.setWordFromBook(i.document.getSelection().toString());
                 
                 i.document.getSelection().toString().length>1 && this.props.showDict();
+                i.document.body.onContextMenu=
+                        function (event) {
+                            event.preventDefault();
+                            return false;
+                        }
+                    }
             
-            };
+            
             let mathjaxScript=document.createElement('script');
             mathjaxScript.src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML';
             i.document.body.appendChild(mathjaxScript);

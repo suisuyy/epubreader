@@ -9,28 +9,37 @@ export default class Dict extends React.Component {
             word: this.props.wordFromBook,
             defs: [],
             dict: {},
-            style:{}
+            style: {}
         };
     }
     componentWillReceiveProps(nextProps) {
         //if your props is received after the component is mounted, then this function will update the state accordingly.
         if (this.props.wordFromBook !== nextProps.wordFromBook) {
-            this.setState({ 
-                word: nextProps.wordFromBook 
+            this.setState({
+                word: nextProps.wordFromBook
             });
         }
     }
     render() {
         return (
-            <div className='dict' style={{...this.props.style,...this.state.style}}>
+            <div className='dict' style={{ ...this.props.style, ...this.state.style }}>
                 <div class='dict-button-group'>
-                <a href="#localdict"> <button className="dictbutton">Local</button> </a>
-                <a href="#yddict"> <button className="dictbutton">YouDao</button> </a>
-                <button onClick={()=>this.moveUp()} className="dictbutton">up</button>
-                <button onClick={()=>this.moveDown()} className="dictbutton">down</button>
-                <button onClick={()=>this.props.toggleDict() } className="dictbutton">close</button>
+                    <a href="#localdict"> <button className="dictbutton">Local</button> </a>
+                    <a href="#yddict"> <button className="dictbutton">YouDao</button> </a>
+                    <button onClick={() => this.moveUp()} className="dictbutton">up</button>
+                    <button onClick={() => this.moveDown()} className="dictbutton">down</button>
+                    <button onClick={() => this.props.toggleDict()} className="dictbutton">close</button>
                 </div>
-                
+
+                <textarea class='dict-textarea'
+                    onContextMenu={
+                        function (event) {
+                            event.preventDefault();
+                            return false;
+                        }
+                    }
+                    placeholder='input some text here then long press to select word to look up the word'
+                />
                 {this.props.dictfiles.length !== 0 &&
                     <div id="localdict">
                         <p>dict file name: {this.props.dictfiles[0].name}</p>
@@ -39,36 +48,42 @@ export default class Dict extends React.Component {
                             event.preventDefault();
                             this.search(this.state.word);
                         }}>
-                            <input type='text' value={this.state.word} onChange={(event) => this.handleInput(event)} />
-                            <button onClick={() => this.search(this.state.word)}>search</button>
+                            <input
+                                placeholder='Search'
+                                type='text'
+                                value={this.state.word}
+                                onChange={(event) => this.handleInput(event)}
+                            />
                             {/* <p onClick={()=>this.search(this.props.word)}>click me to search: {this.props.word}</p> */}
                         </form>
                         <p>{this.props.wordFromBook}</p>
                         <div className='defview'>
-                            
-                                {this.state.word.length > 1 && 
-                                    this.state.dict[this.state.word] && 
-                                <div dangerouslySetInnerHTML={{ __html: this.state.dict[this.state.word] }} />}              
+
+                            {this.state.word.length > 1 &&
+                                this.state.dict[this.state.word] &&
+                                <div dangerouslySetInnerHTML={{ __html: this.state.dict[this.state.word] }} />}
                         </div>
                     </div>
 
                 }
-                
-                {mobileAndTabletCheck()===true &&
-                <iframe title="youdao" 
-                id="yddict"
-                width="100%"
-                height="500px"
-                 src={`https://m.youdao.com/dict?q=${this.state.word}` }
-                />}
-                {mobileAndTabletCheck()===false &&
-                <iframe title="youdao" 
-                id="yddict"
-                width="100%"
-                height="500px"
-                sandbox=""
-                 src={`https://dict.youdao.com/w/${this.state.word}` }
-                />}
+
+                {mobileAndTabletCheck() === true &&
+                    this.state.word.length >= 1 &&
+                    <iframe title="youdao"
+                        id="yddict"
+                        width="100%"
+                        height="500px"
+                        src={`https://m.youdao.com/dict?q=${this.state.word}`}
+                    />}
+                {mobileAndTabletCheck() === false &&
+                    this.state.word.length >= 1 &&
+                    <iframe title="youdao"
+                        id="yddict"
+                        width="100%"
+                        height="500px"
+                        sandbox=""
+                        src={`https://dict.youdao.com/w/${this.state.word}`}
+                    />}
             </div>
 
         )
@@ -81,12 +96,12 @@ export default class Dict extends React.Component {
             this.setState({
                 dict: JSON.parse(result),
             })
-            
+
         }
         console.log(this.props.dictfiles)
         setTimeout(() => {
-            this.props.dictfiles.length!==0 && fr.readAsText(this.props.dictfiles[0]);
-            
+            this.props.dictfiles.length !== 0 && fr.readAsText(this.props.dictfiles[0]);
+
         }, 2000);
         document.onselectionchange = () => {
             let word = document.getSelection().toString();
@@ -96,16 +111,16 @@ export default class Dict extends React.Component {
         };
     }
 
-    moveUp(){
+    moveUp() {
         this.setState({
-            style:{
+            style: {
                 top: 0
             }
         })
     }
-    moveDown(){
+    moveDown() {
         this.setState({
-            style:{
+            style: {
                 bottom: 0
             }
         })

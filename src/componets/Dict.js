@@ -26,9 +26,9 @@ export default class Dict extends React.Component {
                 <div class='dict-button-group'>
                     <a href="#localdict"> <button className="dictbutton">Local</button> </a>
                     <a href="#yddict"> <button className="dictbutton">YouDao</button> </a>
-                    <button onClick={() => this.moveUp()} className="dictbutton">up</button>
-                    <button onClick={() => this.moveDown()} className="dictbutton">down</button>
-                    <button onClick={() => this.props.toggleDict()} className="dictbutton">close</button>
+                    <button onClick={() => this.moveUp()} className="dictbutton">Up</button>
+                    <button onClick={() => this.moveDown()} className="dictbutton">Down</button>
+                    <button onClick={() => this.props.toggleDict()} className="dictbutton">Close</button>
                 </div>
 
                 <textarea class='dict-textarea'

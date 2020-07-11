@@ -190,3 +190,7 @@ input{
     font-size: medium;
      -webkit-user-select: none;
 }
+
+.large-button{
+    font-size: 1.3em;
+}

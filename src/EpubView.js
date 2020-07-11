@@ -129,7 +129,7 @@ export class TOC extends React.Component{
         
         return (
             <div>
-            <button className='noborder' onClick={()=>this.props.toogleTOC()}>show/hide table of content</button>
+            <button className='noborder large-button blue-font' onClick={()=>this.props.toogleTOC()}>show/hide table of content</button>
             { <div id='tocdiv' style={{display:this.props.ifShowToc?'inherit':'none'}}></div>}
             </div>
         )

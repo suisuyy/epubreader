@@ -24,22 +24,31 @@ export default class Dict extends React.Component {
         return (
             <div className='dict' style={{ ...this.props.style, ...this.state.style }}>
                 <div class='dict-button-group'>
-                    <a href="#localdict"> <button className="dictbutton">Local</button> </a>
-                    <a href="#yddict"> <button className="dictbutton">YouDao</button> </a>
+                    <a href="#localdict"> <button className="dictbutton blue-font">Local</button> </a>
+                    <a href="#yddict"> <button className="dictbutton blue-font">YouDao</button> </a>
                     <button onClick={() => this.moveUp()} className="dictbutton">Up</button>
                     <button onClick={() => this.moveDown()} className="dictbutton">Down</button>
+                    <button onClick={() => this.toogleMaxium()} className="dictbutton">Max</button>
                     <button onClick={() => this.props.toggleDict()} className="dictbutton">Close</button>
                 </div>
-
-                <textarea class='dict-textarea'
-                    onContextMenu={
-                        function (event) {
-                            event.preventDefault();
-                            return false;
-                        }
-                    }
-                    placeholder='input some text here then long press to select word to look up the word'
+                <input
+                    placeholder='Search'
+                    type='text'
+                    value={this.state.word}
+                    onChange={(event) => this.handleInput(event)}
                 />
+                {
+                    (this.state.style.height === '100%') &&
+                    <textarea class='dict-textarea'
+                        onContextMenu={
+                            function (event) {
+                                event.preventDefault();
+                                return false;
+                            }
+                        }
+                        placeholder='input some text here then long press to select word to look up the word'
+                    />
+                }
                 {this.props.dictfiles.length !== 0 &&
                     <div id="localdict">
                         <p>dict file name: {this.props.dictfiles[0].name}</p>
@@ -48,13 +57,7 @@ export default class Dict extends React.Component {
                             event.preventDefault();
                             this.search(this.state.word);
                         }}>
-                            <input
-                                placeholder='Search'
-                                type='text'
-                                value={this.state.word}
-                                onChange={(event) => this.handleInput(event)}
-                            />
-                            {/* <p onClick={()=>this.search(this.props.word)}>click me to search: {this.props.word}</p> */}
+
                         </form>
                         <p>{this.props.wordFromBook}</p>
                         <div className='defview'>
@@ -124,6 +127,28 @@ export default class Dict extends React.Component {
                 bottom: 0
             }
         })
+    }
+
+    maxmium() {
+        this.setState({
+            style: {
+                height: '100%'
+            }
+        })
+    }
+
+    mainmium() {
+        this.setState({
+            style: {
+                height: '50%'
+            }
+        })
+    }
+    toogleMaxium() {
+        this.state.style.height !== '100%' ?
+            this.maxmium()
+            :
+            this.mainmium();
     }
 
     handleInput(event) {

@@ -19,7 +19,7 @@ export default class EpubView extends React.Component{
     render(){
 
         if(this.props.file===null){
-            return <p>error,go back and open book agian</p>
+            return <p>error,go back and open book again</p>
         }
         return (
             <div 

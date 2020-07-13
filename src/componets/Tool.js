@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { toggleFullScreen } from '../utils/help'
 
-export default class NavBar extends React.Component {
+export default class Tool extends React.Component {
 
     constructor(props) {
         super(props);
@@ -16,15 +16,15 @@ export default class NavBar extends React.Component {
             return (<div
                 onClick={() => this.setState({ max: true })}
                 onDoubleClick={()=>this.props.showDict()}
-                className="navbarmin lage-font">
+                className="toolmin lage-font">
             </div>)
         }
         return (
-            <div className="navbar" id="navbar">
+            <div className="tool" id="tool">
                 <div
                 onClick={() => this.setState({ max: true })}
                 onDoubleClick={()=>this.props.showDict()}
-                className="navbarmin lage-font">
+                className="toolmin lage-font">
                 
             </div>
                 <ol>

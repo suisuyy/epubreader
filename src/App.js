@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 import './App.css';
@@ -9,7 +10,8 @@ import { getAllBookNamesOnline, getAllFileNamesOnline, getRemoteFile, uploadFile
 import Shelf from './Shelf.js';
 import EpubView from './EpubView';
 import Dict from './componets/Dict';
-import NavBar from './componets/NavBar';
+import Tool from './componets/Tool';
+import Help from './componets/Help';
 
 
 export default class App extends React.Component {
@@ -28,7 +30,7 @@ export default class App extends React.Component {
             onlineBookNames: [],
             onlineDictNames: [],
             ifShowNavBar: true,
-            ifShowDict: true,
+            ifShowDict: false,
             word: '',
             wordFromBook: '',
         };
@@ -39,14 +41,15 @@ export default class App extends React.Component {
         return (
             <div id='appdiv'>
                 {this.state.ifShowNavBar === true 
-                    && <NavBar 
+                    && <Tool 
                     handleFileInput={(e)=>this.handleFileInput(e)}
                     toggleDict={() => this.toggleDict()} 
                     showDict={()=>this.showDict()}/>
                     }
 
                 <Route exact path='/' render={({ history }) => (
-                    <div className="home">
+                    <div className="home" >
+                        <NavBar />
                         <Shelf booknames={this.state.bookfiles.map(i => i.name)}
                             name='local'
                             openBook={(filename) => {
@@ -74,6 +77,14 @@ export default class App extends React.Component {
                     setWordFromBook={(word) => this.setState({ wordFromBook: word })}
                     showDict={()=>this.showDict()}
                     />
+                )} />
+
+                <Route path='/help' render={() => (
+                    <div>
+                        
+                        <Help />
+                    </div>
+                    
                 )} />
 
 
@@ -142,17 +153,24 @@ export default class App extends React.Component {
     }
 
     downloadFile(name) {
+        let localBookNames=this.state.bookfiles.map(i=>i.name);
+        if(localBookNames.indexOf(name)>=0){
+            alert('the book already in local shelf');
+            return;
+        }
         getRemoteFile(name).then(resBlob => {
             let file = new File([resBlob], name);
             if (name.endsWith('.epub')) {
                 this.setState({
                     bookfiles: this.state.bookfiles.concat(file)
                 })
+                alert(`the book ${name} downloaded read it now at local shelf`);
             }
             if (name.endsWith('json')) {
                 this.setState({
                     dictfiles: [file].concat(this.state.dictfiles),
                 })
+                alert('the dict has downloaded you need restart the app to use it');
             }
             savefile(file);
 
@@ -175,6 +193,10 @@ export default class App extends React.Component {
     }
 
     uploadFile(name) {
+        if([...this.state.onlineBookNames,...this.state.onlineDictNames].indexOf(name) >=0){
+            alert(`the book ${name} exited in online library,you can change the book name if you really want upload it anyway`);
+            return;
+        }
         uploadFile(name).then(() => {
             if (name.endsWith('.epub')) {
                 this.setState({
@@ -204,4 +226,19 @@ export default class App extends React.Component {
             ifShowDict: true,
         })
     }
+}
+
+
+function NavBar(props) {
+    
+    return (
+        <div className="navbar">
+            <a className='noline' href='#localshelf' >Local </a>
+            <a className='noline' href='#onlineshelf'>Online </a>
+            <a className='noline' href='#dictshelf'>Dict </a>
+            <Link className="noline" to='/help'>Help</Link>
+            
+
+        </div>
+    )
 }

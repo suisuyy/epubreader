@@ -82,7 +82,7 @@
  
 }
 
-.navbar{
+.tool{
   position: fixed;
   top: 0;
   right: 0;
@@ -91,7 +91,7 @@
   min-height: 50px;
   background-color: lightcyan;
 }
-.navbarmin{
+.toolmin{
   margin: 10px;
   position: fixed;
   bottom: 0;
@@ -129,7 +129,7 @@
   color: blue;
 
 }
-.navbar >ol>li{
+.tool >ol>li{
   margin-bottom: 30px;
 }
 
@@ -185,7 +185,8 @@ input{
 }
 
 .dict-textarea{
-    width: 89%;
+    margin-top: 10px;
+    width: 90%;
     height: 100px;
     font-size: medium;
      -webkit-user-select: none;
@@ -193,4 +194,27 @@ input{
 
 .large-button{
     font-size: 1.3em;
+}
+
+.noline{
+    text-decoration: none;
+    margin-left: 10px;
+    margin-right: 10px;
+    
+}
+
+.navbar{
+    position: sticky;
+    top: 0;
+    background-color: lightcyan;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.helpdiv{
+    margin: 40px;
+}
+
+.shelf{
+    margin: 30px;
 }

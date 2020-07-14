@@ -30,7 +30,6 @@ export default class App extends React.Component {
             onlineBookNames: [],
             onlineDictNames: [],
             ifShowNavBar: true,
-            ifShowDict: true,
             word: '',
             wordFromBook: '',
         };

@@ -10,7 +10,7 @@ export default class Dict extends React.Component {
             defs: [],
             dict: {},
             style: {
-                height: '100%'
+                height: '50%'
             },
             clipboard:''
         };

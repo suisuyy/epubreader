@@ -22,8 +22,6 @@ export default class Help extends React.Component {
                 </li>
                 
             </ul>
-            
-
             <div>
                 <h3>如何阅读</h3>
                 <p>

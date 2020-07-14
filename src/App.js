@@ -7,8 +7,8 @@ import './App.css';
 import { savefile, getfile, getAllFiles, rmFiles } from './utils/fileapi'
 import { getAllBookNamesOnline, getAllFileNamesOnline, getRemoteFile, uploadFile, getFileNamesOnline } from './utils/api';
 
-import Shelf from './Shelf.js';
-import EpubView from './EpubView';
+import Shelf from './componets/Shelf';
+import EpubView from './componets/EpubView';
 import Dict from './componets/Dict';
 import Tool from './componets/Tool';
 import Help from './componets/Help';
@@ -30,7 +30,7 @@ export default class App extends React.Component {
             onlineBookNames: [],
             onlineDictNames: [],
             ifShowNavBar: true,
-            ifShowDict: false,
+            ifShowDict: true,
             word: '',
             wordFromBook: '',
         };

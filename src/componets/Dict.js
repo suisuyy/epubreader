@@ -9,7 +9,10 @@ export default class Dict extends React.Component {
             word: this.props.wordFromBook,
             defs: [],
             dict: {},
-            style: {}
+            style: {
+                height: '100%'
+            },
+            clipboard:''
         };
     }
     componentWillReceiveProps(nextProps) {
@@ -39,16 +42,21 @@ export default class Dict extends React.Component {
                 />
                 {
                     (this.state.style.height === '100%') &&
-                    <textarea class='dict-textarea'
+                    <textarea 
+                    readOnly
+                    class='dict-textarea'
+                        value={this.state.clipboard}
+                        onClick={()=>this.handleClipboard()}
                         onContextMenu={
                             function (event) {
                                 event.preventDefault();
                                 return false;
                             }
                         }
-                        placeholder='input some text here then long press to select word to look up the word'
+                        placeholder='click me to get text from clipboard'
                     />
                 }
+               
                 {this.props.dictfiles.length !== 0 &&
                     <div id="localdict">
                         <p>dict file name: {this.props.dictfiles[0].name}</p>
@@ -70,6 +78,9 @@ export default class Dict extends React.Component {
 
                 }
 
+                 <p>
+                    有道在线词典
+                </p>
                 {mobileAndTabletCheck() === true &&
                     this.state.word.length >= 1 &&
                     <iframe title="youdao"
@@ -166,5 +177,19 @@ export default class Dict extends React.Component {
             word: word,
             defs: defs,
         })
+    }
+
+    handleClipboard(){
+        setInterval(() => {
+            navigator.clipboard.readText().then(text => {
+                console.log(text)
+                if(text===this.state.clipboard){
+                    return
+                }
+                this.setState({
+                    clipboard: text,
+                })
+            });
+        }, 1000);
     }
 }

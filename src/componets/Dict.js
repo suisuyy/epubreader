@@ -10,23 +10,36 @@ export default class Dict extends React.Component {
             defs: [],
             dict: {},
             style: {
-                height: '50%'
             },
-            clipboard:''
+            clipboard: ''
         };
     }
     componentWillReceiveProps(nextProps) {
         //if your props is received after the component is mounted, then this function will update the state accordingly.
         if (this.props.wordFromBook !== nextProps.wordFromBook) {
             this.setState({
-                word: nextProps.wordFromBook.toLowerCase()
+                word: nextProps.wordFromBook.toLowerCase().trim()
             });
+        }
+        if(this.props.dictfiles!==nextProps.dictfiles){
+            console.log(nextProps.dictfiles)
+            let fr = new FileReader();
+        fr.onload = (e) => {
+            let result = e.target.result;
+            
+            this.setState({
+                dict: JSON.parse(result),
+            })
+
+        }
+       nextProps.dictfiles.length > 0 && fr.readAsText(nextProps.dictfiles[0]);
+
         }
     }
     render() {
         return (
             <div className='dict' style={{ ...this.props.style, ...this.state.style }}>
-                <div class='dict-button-group'>
+                <div className='dict-button-group'>
                     <a href="#localdict"> <button className="dictbutton blue-font">Local</button> </a>
                     <a href="#yddict"> <button className="dictbutton blue-font">YouDao</button> </a>
                     <button onClick={() => this.moveUp()} className="dictbutton">Up</button>
@@ -34,7 +47,8 @@ export default class Dict extends React.Component {
                     <button onClick={() => this.toogleMaxium()} className="dictbutton">Max</button>
                     <button onClick={() => this.props.toggleDict()} className="dictbutton">Close</button>
                 </div>
-                <input
+                <div id="dict-input-div">
+                    <input
                     placeholder='Search'
                     type='text'
                     value={this.state.word}
@@ -42,21 +56,24 @@ export default class Dict extends React.Component {
                 />
                 {
                     (this.state.style.height === '100%') &&
-                    <textarea 
-                    readOnly
-                    class='dict-textarea'
+                    <textarea
+                        readOnly
+                        class='dict-textarea'
+                        id="clipboardarea"
                         value={this.state.clipboard}
-                        onClick={()=>this.handleClipboard()}
+                        onClick={() => this.handleClipboard()}
                         onContextMenu={
                             function (event) {
                                 event.preventDefault();
                                 return false;
                             }
                         }
-                        placeholder='click me to get text from clipboard'
+                        placeholder='click me to get text from clipboard,may only works on Chrome browser'
                     />
                 }
-               
+                </div>
+                
+
                 {this.props.dictfiles.length !== 0 &&
                     <div id="localdict">
                         <p>dict file name: {this.props.dictfiles[0].name}</p>
@@ -78,7 +95,7 @@ export default class Dict extends React.Component {
 
                 }
 
-                 <p>
+                <p>
                     有道在线词典
                 </p>
                 {mobileAndTabletCheck() === true &&
@@ -104,25 +121,14 @@ export default class Dict extends React.Component {
     }
 
     componentDidMount() {
-        let fr = new FileReader();
-        fr.onload = (e) => {
-            let result = e.target.result;
-            this.setState({
-                dict: JSON.parse(result),
-            })
-
-        }
-        console.log(this.props.dictfiles)
-        setTimeout(() => {
-            this.props.dictfiles.length !== 0 && fr.readAsText(this.props.dictfiles[0]);
-
-        }, 2000);
+        
         document.onselectionchange = () => {
-            let word = document.getSelection().toString();
-            if (word.length > 1) {
+            let word = document.getSelection().toString().trim();
+            if (word.length > 1 && document.getSelection().anchorNode.id==='dict-input-div') {
                 this.search(word);
             }
         };
+
     }
 
     moveUp() {
@@ -179,17 +185,20 @@ export default class Dict extends React.Component {
         })
     }
 
-    handleClipboard(){
+    handleClipboard() {
         setInterval(() => {
-            navigator.clipboard.readText().then(text => {
-                console.log(text)
-                if(text===this.state.clipboard){
-                    return
-                }
-                this.setState({
-                    clipboard: text,
-                })
-            });
+            if (document.hasFocus()) {
+                navigator.clipboard.readText().then(text => {
+                    if (text === this.state.clipboard) {
+                        return
+                    }
+                    this.setState({
+                        clipboard: text,
+                    })
+                });
+
+            }
+
         }, 1000);
     }
 }
